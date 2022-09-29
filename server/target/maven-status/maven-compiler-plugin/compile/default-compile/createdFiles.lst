@@ -1,0 +1,8 @@
+com\catchyan\handler\ServerEventHandler_INPUT_NAME.class
+com\catchyan\handler\ServerEventHandler_ROOM_OPTION.class
+com\catchyan\ServerHandler.class
+com\catchyan\handler\AbstractServerEventHandler.class
+com\catchyan\Server$1.class
+com\catchyan\handler\ServerEventHandler.class
+com\catchyan\Server.class
+com\catchyan\handler\ServerEventHandler_JOIN_ROOM.class

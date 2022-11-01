@@ -7,15 +7,15 @@ import lombok.Setter;
 @Setter
 public class Order {
     enum Type {
-        KE,
-        SHUN,
+        TRIPLET, // 刻子
+        SEQUENCE, // 顺子
         BOTH
     }
     Type type;
-    Pai[] pais;
+    Tile[] tiles;
 
-    public Order(Type type, Pai ...pais) {
+    public Order(Type type, Tile... tiles) {
         this.type = type;
-        this.pais = pais;
+        this.tiles = tiles;
     }
 }

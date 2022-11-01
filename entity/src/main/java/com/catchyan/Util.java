@@ -2,7 +2,7 @@ package com.catchyan;
 
 import cn.hutool.core.util.StrUtil;
 import com.catchyan.entity.Option;
-import com.catchyan.entity.Pai;
+import com.catchyan.entity.Tile;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,18 +19,18 @@ public class Util {
             switch (typeString) {
                 case "c":
                 case "chi":
-                    result = new Option(Option.Type.CHI);
+                    result = new Option(Option.Type.CHOW);
                     break;
                 case "peng":
-                    result = new Option(Option.Type.PENG);
+                    result = new Option(Option.Type.PUNG);
                     break;
                 case "g":
                 case "gang":
-                    result = new Option(Option.Type.GANG);
+                    result = new Option(Option.Type.GONG);
                     break;
                 case "h":
                 case "hu":
-                    result = new Option(Option.Type.HU);
+                    result = new Option(Option.Type.WIN);
                     break;
                 case "p":
                 case "pass":
@@ -45,52 +45,52 @@ public class Util {
             if(StrUtil.isNotEmpty(paiString)){
                 String[] pais = paiString.split(" ");
                 for (int i = 1; i < pais.length; i++) {
-                    result.getPais().add(getPaiByCommand(pais[i]));
+                    result.getTiles().add(getPaiByCommand(pais[i]));
                 }
             }
         }
         return result;
     }
 
-    public static Pai getPaiByCommand(String command){
-        Pai pai = null;
+    public static Tile getPaiByCommand(String command){
+        Tile tile = null;
         String type = command.substring(0, 1);
         switch (type){
             case "w":
-                pai = new Pai(Pai.Type.WAN);
+                tile = new Tile(Tile.Suit.CHARACTER);
                 break;
             case "|":
-                pai = new Pai(Pai.Type.TIAO);
+                tile = new Tile(Tile.Suit.BAMBOO);
                 break;
             case ".":
-                pai = new Pai(Pai.Type.TONG);
+                tile = new Tile(Tile.Suit.DOT);
                 break;
             case "东":
-                pai = new Pai(Pai.Type.FENG, 1);
+                tile = new Tile(Tile.Suit.WIND, 1);
                 break;
             case "南":
-                pai = new Pai(Pai.Type.FENG, 2);
+                tile = new Tile(Tile.Suit.WIND, 2);
                 break;
             case "西":
-                pai = new Pai(Pai.Type.FENG, 3);
+                tile = new Tile(Tile.Suit.WIND, 3);
                 break;
             case "北":
-                pai = new Pai(Pai.Type.FENG, 4);
+                tile = new Tile(Tile.Suit.WIND, 4);
                 break;
             case "中":
-                pai = new Pai(Pai.Type.FENG, 5);
+                tile = new Tile(Tile.Suit.WIND, 5);
                 break;
             case "發":
-                pai = new Pai(Pai.Type.FENG, 6);
+                tile = new Tile(Tile.Suit.WIND, 6);
                 break;
             case "白":
-                pai = new Pai(Pai.Type.FENG, 7);
+                tile = new Tile(Tile.Suit.WIND, 7);
                 break;
         }
-        if(pai.getPoint() == 0){
-            pai.setPoint(Integer.parseInt(command.substring(1)));
+        if(tile.getPoint() == 0){
+            tile.setPoint(Integer.parseInt(command.substring(1)));
         }
-        return pai;
+        return tile;
     }
 
 }

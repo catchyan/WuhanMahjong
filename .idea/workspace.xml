@@ -10,8 +10,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba05b846-7e84-48b4-ac06-efb4967f21f7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/catchyan/handler/ClientEventHandler_PERSON_VIEW.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/catchyan/handler/ClientEventHandler_PERSON_VIEW.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/Util.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/entity/Hu.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/entity/Win.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/entity/Option.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/entity/Option.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/entity/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/entity/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/entity/Pai.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/entity/Tile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/entity/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/entity/Person.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/entity/PersonView.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/entity/PersonView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/entity/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/entity/Room.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/io/Printer.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/io/Printer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/io/Reader.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/io/Reader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/packet/PersonViewPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/src/main/java/com/catchyan/packet/PersonViewPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entity/src/test/java/com/catchyan/entity/PaiTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/src/test/java/com/catchyan/entity/TileTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/entity/src/test/java/com/catchyan/io/PrinterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/entity/src/test/java/com/catchyan/io/PrinterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/catchyan/handler/gamehandler/GameOptionHandler_PLAY.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/catchyan/handler/gamehandler/GameOptionHandler_PLAY.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +74,8 @@
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;1.8&quot;,
     &quot;last.edited.regexp&quot;: &quot;&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/code/work/dz/dz220523.1(威海市执法办案区)/TdTranscodingServer/pom.xml&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/code/my/ujcms/pom.xml&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
@@ -94,7 +109,7 @@
       <recent name="com.catchyan.packet" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.PaiTest.findAllOrders">
+  <component name="RunManager" selected="Application.Server">
     <configuration name="Client2" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.catchyan.Client" />
       <module name="client" />
@@ -157,7 +172,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PaiTest.checkHu" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TileTest.checkHu" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="entity" />
       <extension name="coverage">
         <pattern>
@@ -166,14 +181,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.catchyan.entity" />
-      <option name="MAIN_CLASS_NAME" value="com.catchyan.entity.PaiTest" />
+      <option name="MAIN_CLASS_NAME" value="com.catchyan.entity.TileTest" />
       <option name="METHOD_NAME" value="checkHu" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PaiTest.findAllOrders" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TileTest.findAllOrders" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="entity" />
       <extension name="coverage">
         <pattern>
@@ -182,14 +197,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.catchyan.entity" />
-      <option name="MAIN_CLASS_NAME" value="com.catchyan.entity.PaiTest" />
+      <option name="MAIN_CLASS_NAME" value="com.catchyan.entity.TileTest" />
       <option name="METHOD_NAME" value="findAllOrders" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PaiTest.findJiang" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TileTest.findJiang" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="entity" />
       <extension name="coverage">
         <pattern>
@@ -198,14 +213,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.catchyan.entity" />
-      <option name="MAIN_CLASS_NAME" value="com.catchyan.entity.PaiTest" />
+      <option name="MAIN_CLASS_NAME" value="com.catchyan.entity.TileTest" />
       <option name="METHOD_NAME" value="findJiang" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PaiTest.mapTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TileTest.mapTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="entity" />
       <extension name="coverage">
         <pattern>
@@ -214,14 +229,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.catchyan.entity" />
-      <option name="MAIN_CLASS_NAME" value="com.catchyan.entity.PaiTest" />
+      <option name="MAIN_CLASS_NAME" value="com.catchyan.entity.TileTest" />
       <option name="METHOD_NAME" value="mapTest" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PaiTest.removeFromList" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TileTest.removeFromList" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="entity" />
       <extension name="coverage">
         <pattern>
@@ -230,7 +245,7 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.catchyan.entity" />
-      <option name="MAIN_CLASS_NAME" value="com.catchyan.entity.PaiTest" />
+      <option name="MAIN_CLASS_NAME" value="com.catchyan.entity.TileTest" />
       <option name="METHOD_NAME" value="removeFromList" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
@@ -246,19 +261,19 @@
       <item itemvalue="Application.Client6" />
       <item itemvalue="Application.Client7" />
       <item itemvalue="Application.Client8" />
-      <item itemvalue="JUnit.PaiTest.findAllOrders" />
-      <item itemvalue="JUnit.PaiTest.findJiang" />
-      <item itemvalue="JUnit.PaiTest.checkHu" />
-      <item itemvalue="JUnit.PaiTest.mapTest" />
-      <item itemvalue="JUnit.PaiTest.removeFromList" />
+      <item itemvalue="JUnit.TileTest.checkHu" />
+      <item itemvalue="JUnit.TileTest.findAllOrders" />
+      <item itemvalue="JUnit.TileTest.findJiang" />
+      <item itemvalue="JUnit.TileTest.mapTest" />
+      <item itemvalue="JUnit.TileTest.removeFromList" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.PaiTest.findAllOrders" />
-        <item itemvalue="JUnit.PaiTest.findJiang" />
-        <item itemvalue="JUnit.PaiTest.checkHu" />
-        <item itemvalue="JUnit.PaiTest.removeFromList" />
-        <item itemvalue="JUnit.PaiTest.mapTest" />
+        <item itemvalue="JUnit.TileTest.findAllOrders" />
+        <item itemvalue="JUnit.TileTest.findJiang" />
+        <item itemvalue="JUnit.TileTest.checkHu" />
+        <item itemvalue="JUnit.TileTest.removeFromList" />
+        <item itemvalue="JUnit.TileTest.mapTest" />
       </list>
     </recent_temporary>
   </component>
@@ -307,7 +322,10 @@
       <workItem from="1664241464552" duration="5883000" />
       <workItem from="1664326950235" duration="1451000" />
       <workItem from="1664335062238" duration="18663000" />
-      <workItem from="1664417257272" duration="2927000" />
+      <workItem from="1664417257272" duration="7864000" />
+      <workItem from="1664455871532" duration="5258000" />
+      <workItem from="1664499432910" duration="2513000" />
+      <workItem from="1667288194797" duration="34000" />
     </task>
     <servers />
   </component>
@@ -329,7 +347,7 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/entity/src/test/java/com/catchyan/entity/PaiTest.java</url>
+          <url>file://$PROJECT_DIR$/entity/src/test/java/com/catchyan/entity/TileTest.java</url>
           <line>73</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>

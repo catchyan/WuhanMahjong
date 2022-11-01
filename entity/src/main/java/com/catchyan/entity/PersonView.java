@@ -9,6 +9,6 @@ public class PersonView {
     private String name;
     private boolean isDealer;
     private int handCount;
-    private List<Pai[]> kou;
-    private List<Pai> gang;
+    private List<Order> eat;
+    private List<Tile> kong;
 }

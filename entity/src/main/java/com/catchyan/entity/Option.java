@@ -14,19 +14,19 @@ public class Option {
     @AllArgsConstructor
     @Getter
     public enum Type{
-        CHI(1, "chi[c/chi]"), // 吃
-        PENG(5, "peng[peng]"), // 碰
-        GANG(5, "gang[g/gang]"), // 杠
-        HU(9, "hu[h/hu]"), // 胡
-        PASS(0, "pass[p/pass]"), // 过
-        PLAY(0, "play[d/da]"), // 打牌
+        CHOW(1, "chi[c/chi]"),
+        PUNG(5, "peng[peng]"),
+        GONG(5, "gang[g/gang]"),
+        WIN(9, "hu[h/hu]"),
+        PASS(0, "pass[p/pass]"),
+        PLAY(0, "play[d/da]"),
         ;
         private final int priority;
         private final String display;
     }
     private Type type;
 
-    private List<Pai> pais = new ArrayList<>();
+    private List<Tile> tiles = new ArrayList<>();
 
     int priority;
 

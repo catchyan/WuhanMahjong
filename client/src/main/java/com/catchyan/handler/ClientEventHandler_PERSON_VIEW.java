@@ -2,7 +2,8 @@ package com.catchyan.handler;
 
 import com.catchyan.Util;
 import com.catchyan.entity.Option;
-import com.catchyan.entity.Pai;
+import com.catchyan.entity.Order;
+import com.catchyan.entity.Tile;
 import com.catchyan.entity.PersonView;
 import com.catchyan.io.Printer;
 import com.catchyan.io.Reader;
@@ -27,8 +28,8 @@ public class ClientEventHandler_PERSON_VIEW extends AbstractClientEventHandler {
         printPersonView(packet.getPrev(), " (prev)");
         printPersonView(packet.getOpposite(), " (opposite)");
         printPersonView(packet.getNext(), " (next)");
-        printTable(packet.getLai(), packet.getPi1(), packet.getPi2(), packet.getLeftPaiCount());
-        printSelfInfo(packet.getHand(), packet.getKou(), packet.getGang(), packet.getOptions());
+        printTable(packet.getRascal(), packet.getKong1(), packet.getKong2(), packet.getLeftPaiCount());
+        printSelfInfo(packet.getHand(), packet.getEat(), packet.getGang(), packet.getOptions());
 
     }
 
@@ -43,24 +44,24 @@ public class ClientEventHandler_PERSON_VIEW extends AbstractClientEventHandler {
         return option;
     }
 
-    private void printSelfInfo(List<Pai> hand, List<Pai[]> kou, List<Pai> gang, List<Option> options) {
+    private void printSelfInfo(List<Tile> hand, List<Order> kou, List<Tile> gang, List<Option> options) {
         Printer.print("kou: ");
-        for (Pai[] pais : kou) {
-            for (Pai pai : pais) {
-                pai.print();
+        for (Order order : kou) {
+            for (Tile tile : order.getTiles()) {
+                tile.print();
             }
             Printer.space();
         }
         Printer.print(" gang: ");
         Printer.nextLine();
-        for (Pai pai : gang) {
-            pai.print();
+        for (Tile tile : gang) {
+            tile.print();
             Printer.space();
         }
         Printer.nextLine();
         Printer.print(" hand: ");
-        for (Pai pai : hand) {
-            pai.print();
+        for (Tile tile : hand) {
+            tile.print();
         }
         if(options.size() > 0){
             Printer.print(" operation: ");
@@ -70,7 +71,7 @@ public class ClientEventHandler_PERSON_VIEW extends AbstractClientEventHandler {
         }
     }
 
-    private void printTable(Pai lai, Pai pi1, Pai pi2, int leftPaiCount) {
+    private void printTable(Tile lai, Tile pi1, Tile pi2, int leftPaiCount) {
         Printer.print("lai:");
         lai.print();
         Printer.print(" pi1:");
@@ -86,16 +87,16 @@ public class ClientEventHandler_PERSON_VIEW extends AbstractClientEventHandler {
         Printer.print("hand: " + personView.getHandCount());
         Printer.space();
         Printer.print("kou: ");
-        personView.getKou().forEach(pais->{
-            for (Pai pai : pais) {
-                pai.print();
+        personView.getEat().forEach(order->{
+            for (Tile tile : order.getTiles()) {
+                tile.print();
             }
             Printer.space();
         });
         Printer.space();
         Printer.print("gang:");
-        for (Pai pai : personView.getGang()) {
-            pai.print();
+        for (Tile tile : personView.getKong()) {
+            tile.print();
         }
         Printer.nextLine();
     }

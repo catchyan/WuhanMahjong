@@ -10,12 +10,13 @@ import java.util.Objects;
 @Data
 public class Person {
     private String name;        // 姓名
-    private List<Pai> hand;     // 手牌
-    private List<Pai[]> kou = new ArrayList<>();      // 开口区
-    private List<Pai> gang = new ArrayList<>();     // 杠区
+    private List<Tile> hand;     // 手牌
+    private List<Order> eat = new ArrayList<>();      // 开口区
+    private List<Tile> kong = new ArrayList<>();     // 杠区
     private boolean isWinner;   // 是否为赢家
     private boolean isDealer;   // 是否为庄
     private Channel channel;
+    private int multiple; // 番数
     private Person prev;        // 上家
     private Person next;        // 下家
     private List<Option> options = new ArrayList<>(); // 玩家可操作列表
@@ -30,7 +31,7 @@ public class Person {
         return prev;
     }
 
-    public Person setHand(List<Pai> hand){
+    public Person setHand(List<Tile> hand){
         this.hand = hand;
         return this;
     }

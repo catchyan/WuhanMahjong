@@ -17,7 +17,7 @@ public class Reader {
         }
     }
 
-    public static Option readCommand(){
+    public static Option readOption(){
         return null;
     }
     public static int readInt() {

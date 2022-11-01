@@ -6,34 +6,32 @@ import com.catchyan.packet.PersonViewPacket;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.catchyan.entity.Pai.Type.*;
+import static com.catchyan.entity.Tile.Suit.*;
 
 @Data
 public class Room {
     List<Person> players = new ArrayList<>();
-    private Pai lai;
-    private Pai pi1;
-    private Pai pi2;
-    private Person dealer;
+    private Tile rascal; // 癞子
+    private Tile kong1; // 皮子1
+    private Tile kong2; // 皮子2
+    private Person dealer; // 庄
     private Person turn;
-    private List<Pai> table;
-    private Pai flop; // 翻出来的牌
-
-    private Pai played; // 当前出的牌
-    private int zhuangCount = 0;
-
+    private List<Tile> table;
+    private Tile flop; // 翻出来的牌
+    private Tile played; // 当前出的牌
+    private int dealerCount = 0;
     private List<Option> sleepOptions = new ArrayList<>();
 
 
     public void init(){
         initTable();
         initPositionAndDealer();
-        initLaiZiAndPiZi();
+        initRascalAndKong();
         initHand();
         startGame();
     }
@@ -50,9 +48,9 @@ public class Room {
 
     private void calculateOptions() {
         if(played != null){
-            calcChi();
-            calcPeng();
-            calcHu();
+            calcChow();
+            calcPung();
+            calcWin();
         }
         if(sleepOptions.isEmpty()){
             turn = turn.getNext();
@@ -60,56 +58,86 @@ public class Room {
         }
     }
 
-    private void calcChi(){
+    private void calcChow(){
         Person next = getNext(played.getPlayerName());
-        List<Pai> withoutLaiAndPi = next
+        List<Tile> withoutLaiAndPi = next
                 .getHand()
                 .stream()
-                .filter(p -> !p.isEqual(lai) && !p.isEqual(pi1) && !p.isEqual(pi2))
+                .filter(p -> !p.isEqual(rascal) && !p.isEqual(kong1) && !p.isEqual(kong2))
                 .collect(Collectors.toList());
-        boolean plus1 = withoutLaiAndPi.stream().anyMatch(p -> p.isEqual(Pai.plusPoint(played, 1, true)));
-        boolean plus2 = withoutLaiAndPi.stream().anyMatch(p -> p.isEqual(Pai.plusPoint(played, 2, true)));
-        boolean sub1 = withoutLaiAndPi.stream().anyMatch(p -> p.isEqual(Pai.plusPoint(played, -1, true)));
-        boolean sub2 = withoutLaiAndPi.stream().anyMatch(p -> p.isEqual(Pai.plusPoint(played, -2, true)));
+        boolean plus1 = withoutLaiAndPi.stream().anyMatch(p -> p.isEqual(Tile.plusPoint(played, 1, true)));
+        boolean plus2 = withoutLaiAndPi.stream().anyMatch(p -> p.isEqual(Tile.plusPoint(played, 2, true)));
+        boolean sub1 = withoutLaiAndPi.stream().anyMatch(p -> p.isEqual(Tile.plusPoint(played, -1, true)));
+        boolean sub2 = withoutLaiAndPi.stream().anyMatch(p -> p.isEqual(Tile.plusPoint(played, -2, true)));
         if((plus1 && plus2) || (plus1 && sub1) || (sub1 && sub2)){
-            Option chi = new Option(Option.Type.CHI, next.getName());
+            Option chi = new Option(Option.Type.CHOW, next.getName());
             next.getOptions().add(chi);
-            chi.setPriority(Option.Type.CHI.getPriority());
+            chi.setPriority(Option.Type.CHOW.getPriority());
             sleepOptions.add(chi);
         }
     }
 
-    private void calcPeng(){
-        getOthers(played.getPlayerName())
+    private void calcPung(){
+        getOthers()
                 .stream()
                 .filter(p->p.getHand().stream().filter(pai -> pai.isEqual(played)).count() >= 2)
                 .forEach(p-> {
-                    Option option = new Option(Option.Type.PENG, p.getName());
+                    Option option = new Option(Option.Type.PUNG, p.getName());
                     p.getOptions().add(option);
                     sleepOptions.add(option);
                 });
     }
 
-    private void calcHu(){
-        for (Person other : getOthers(played.getPlayerName())) {
-            List<Pai> clone = new ArrayList<>(other.getHand());
+    private void calcWin(){
+        for (Person other : getOthers()) {
+            List<Tile> hand = other.getHand();
+            if(other.getEat().isEmpty()){
+                continue;
+            }
+            if(hand.contains(kong1) || hand.contains(kong2) || hand.contains(new Tile(WIND, 5))){
+                continue;
+            }
+            List<Tile> clone = new ArrayList<>(hand);
             clone.add(played);
-            List<Pai[]> jiang = findJiang(clone, lai);
-            jiang.forEach(j->{
-                List<Pai> withoutJiang = new ArrayList<>(clone);
-                withoutJiang.remove(j[0]);
-                withoutJiang.remove(j[1]);
-                List<List<Order>> allOrders = findAllOrders(withoutJiang, lai);
+            List<Tile[]> pair = findPair(clone);
+            if(pair.isEmpty()){
+                continue;
+            }
+            for (Tile[] j : pair) {
+                List<Tile> withoutPair = new ArrayList<>(clone);
+                withoutPair.remove(j[0]);
+                withoutPair.remove(j[1]);
+                List<List<Order>> allOrders = findAllOrders(withoutPair);
                 if(allOrders.isEmpty()){
-                    return;
+                    continue;
                 }
-                List<Hu> possibleHu = new ArrayList<>();
+                // found a possible Pair(maybe not 2 5 8) and a valid list of orders
+                // now check if all order hits a big Win(which not require 2 5 8 Jiang)
+                // a pair of rascal can be regarded as a valid Pair
                 for (List<Order> orders : allOrders) {
-                    Hu hu = new Hu(j, orders);
-                    possibleHu.add(hu);
+                    Win win = new Win(j, orders);
+                    if(checkSameSuit(j, orders, other.getEat())){
+                        win.setAllSameSuit(true);
+                    }else{
+//                        j[0].getPoint()
+                    }
                 }
-            });
+            }
         }
+    }
+
+    private boolean checkSameSuit(Tile[] pair, List<Order> orders, List<Order> eat) {
+        if(pair[0].equals(rascal)){
+            return isSameSuit(eat.get(0).getTiles()[0].getSuit(), orders) && isSameSuit(eat.get(0).getTiles()[0].getSuit(), eat);
+        }else{
+            return isSameSuit(pair[0].getSuit(), orders) && isSameSuit(pair[0].getSuit(), eat);
+        }
+    }
+
+    private boolean isSameSuit(Tile.Suit suit, List<Order> orders){
+        return orders.stream()
+                .map(Order::getTiles)
+                .allMatch(tiles -> tiles[0].getSuit().equals(suit) && tiles[1].getSuit().equals(suit) && tiles[2].getSuit().equals(suit));
     }
 
     private void sendRoomInfoToAllPlayers() {
@@ -118,13 +146,13 @@ public class Room {
             packet.setNext(toPersonView(player.getNext()));
             packet.setOpposite(toPersonView(player.getNext().getNext()));
             packet.setPrev(toPersonView(player.getNext().getNext().getNext()));
-            packet.setLai(lai);
-            packet.setKou(player.getKou());
-            packet.setGang(player.getGang());
+            packet.setRascal(rascal);
+            packet.setEat(player.getEat());
+            packet.setGang(player.getKong());
             packet.setLeftPaiCount(table.size());
             packet.setHand(player.getHand());
-            packet.setPi1(pi1);
-            packet.setPi2(pi2);
+            packet.setKong1(kong1);
+            packet.setKong2(kong2);
             packet.setOptions(player.getOptions());
             player.getChannel().writeAndFlush(packet);
         });
@@ -135,8 +163,8 @@ public class Room {
         result.setName(person.getName());
         result.setHandCount(person.getHand().size());
         result.setDealer(dealer.equals(person));
-        result.setKou(person.getKou());
-        result.setGang(person.getGang());
+        result.setEat(person.getEat());
+        result.setKong(person.getKong());
         return result;
     }
     public boolean isFull(){
@@ -154,29 +182,26 @@ public class Room {
     }
 
 
-    private void initLaiZiAndPiZi() {
+    private void initRascalAndKong() {
         flop = getPai(1).get(0);
-        if(flop.getType().equals(FENG)){
+        if(flop.getSuit().equals(WIND)){
             if(flop.getPoint() == 4 || flop.getPoint() == 5){
-                // 翻出北 中, 发财癞子
-                lai = new Pai(FENG, 6);
-                // 西 北皮
-                pi1 = new Pai(FENG, 3);
-                pi2 = new Pai(FENG, 4);
+                rascal = new Tile(WIND, 6);
+                kong1 = new Tile(WIND, 3);
+                kong2 = new Tile(WIND, 4);
             }else if(flop.getPoint() == 6){
-                // 翻出发财，白班癞子
-                lai = new Pai(FENG, 7);
-                pi1 = new Pai(FENG, 3);
-                pi2 = new Pai(FENG, 4);
+                rascal = new Tile(WIND, 7);
+                kong1 = new Tile(WIND, 3);
+                kong2 = new Tile(WIND, 4);
             } else {
-                lai = Pai.plusPoint(flop, 1, false);
-                pi1 = Pai.plusPoint(flop, -1, false);
-                pi2 = flop;
+                rascal = Tile.plusPoint(flop, 1, false);
+                kong1 = Tile.plusPoint(flop, -1, false);
+                kong2 = flop;
             }
         }else{
-            lai = Pai.plusPoint(flop, 1, false);
-            pi1 = Pai.plusPoint(flop, -1, false);
-            pi2 = flop;
+            rascal = Tile.plusPoint(flop, 1, false);
+            kong1 = Tile.plusPoint(flop, -1, false);
+            kong2 = flop;
         }
     }
 
@@ -189,8 +214,8 @@ public class Room {
     }
 
     private void initPositionAndDealer() {
-        if(zhuangCount % 16 == 0 ){ // 4圈一个风 换位置
-            if(zhuangCount != 0){
+        if(dealerCount % 16 == 0 ){ // 4圈一个风 换位置
+            if(dealerCount != 0){
                 notifyAll("finish a 'FENG', players position change");
             }
             // 换位置
@@ -207,7 +232,7 @@ public class Room {
                 winner.setDealer(false);
                 dealer = winner.getNext();
                 dealer.setDealer(true);
-                zhuangCount ++;
+                dealerCount++;
             }
         }
     }
@@ -216,12 +241,12 @@ public class Room {
         table = new ArrayList<>();
         for (int i = 1; i <= 9; i++) {
             for (int j = 1; j <= 4; j++) {
-                table.add(new Pai(TONG, i));
-                table.add(new Pai(TIAO, i));
-                table.add(new Pai(WAN, i));
+                table.add(new Tile(DOT, i));
+                table.add(new Tile(BAMBOO, i));
+                table.add(new Tile(CHARACTER, i));
                 if(i <= 7) {
                     // 风
-                    table.add(new Pai(FENG, i));
+                    table.add(new Tile(WIND, i));
                 }
             }
         }
@@ -234,8 +259,8 @@ public class Room {
         return players.stream().filter(Person::isDealer).findAny().orElse(null);
     }
 
-    private List<Pai> getPai(int size){
-        List<Pai> result = RandomUtil.randomEleList(table, size);
+    private List<Tile> getPai(int size){
+        List<Tile> result = RandomUtil.randomEleList(table, size);
         result.forEach(result::remove);
         if(size > 1){
             Collections.sort(result);
@@ -243,7 +268,7 @@ public class Room {
         return result;
     }
 
-    private List<Person> getOthers(String name){
+    private List<Person> getOthers(){
         return players.stream()
                 .filter(p->!p.getName().equals(played.getPlayerName()))
                 .collect(Collectors.toList());
@@ -254,21 +279,21 @@ public class Room {
     }
     private Person getPerson(String name){
         return players.stream()
-                .filter(p->p.getName().equals(played.getPlayerName()))
-                .findFirst().get();
+                .filter(p->p.getName().equals(name))
+                .findFirst().orElse(null);
     }
 
-    public List<Pai[]> findJiang(List<Pai> list, Pai lai){
-        List<Pai[]> result = new ArrayList<>();
-        long laiCount = list.stream().filter(p->p.equals(lai)).count();
-        list.stream().filter(p->!p.equals(lai)).distinct().forEach(
+    public List<Tile[]> findPair(List<Tile> list){
+        List<Tile[]> result = new ArrayList<>();
+        long rascalCount = list.stream().filter(p->p.equals(rascal)).count();
+        list.stream().filter(p->!p.equals(rascal)).distinct().forEach(
                 pai ->{
-                    long count = list.stream().filter(pai1 -> pai1.equals(pai)).count();
+                    long count = list.stream().filter(tile -> tile.equals(pai)).count();
                     if(count >= 2){
-                        result.add(new Pai[]{pai, pai});
+                        result.add(new Tile[]{pai, pai});
                     }
-                    if(laiCount > 0){
-                        result.add(new Pai[]{pai, lai});
+                    if(rascalCount > 0){
+                        result.add(new Tile[]{pai, rascal});
                     }
                 }
         );
@@ -277,24 +302,23 @@ public class Room {
 
     /**
      *
-     * @param list assume Jiang is removed from list
-     * @param lai lai
-     * @return
+     * @param list assume Pair is removed from list
+     * @return all possible orders
      */
-    public List<List<Order>> findAllOrders(List<Pai> list, Pai lai){
-        // HU = all pai which is not lai must in a correct order
-        List<Pai> withoutLai = list.stream()
-                .filter(p -> !p.isEqual(lai))
+    public List<List<Order>> findAllOrders(List<Tile> list){
+        // HU = all pai which is not rascal must in a correct order
+        List<Tile> withoutLai = list.stream()
+                .filter(p -> !p.isEqual(rascal))
                 .sorted()
                 .collect(Collectors.toList());
-        long laiCount = list.size() - withoutLai.size();
+        long rascalCount = list.size() - withoutLai.size();
         List<List<Order>> result = new ArrayList<>();
         List<Order> orders;
-        if(laiCount == list.size()){
+        if(rascalCount == list.size()){
             orders = new ArrayList<>();
-            orders.add(new Order(Order.Type.BOTH, lai, lai, lai));
+            orders.add(new Order(Order.Type.BOTH, rascal, rascal, rascal));
         }else{
-            orders = findPossibleOrderByPai(withoutLai.get(0), list, lai, laiCount);
+            orders = findPossibleOrderByPai(withoutLai.get(0), list, rascalCount);
         }
 
         if(orders.isEmpty()){
@@ -308,9 +332,9 @@ public class Room {
             }
         }else{
             for (Order order : orders) {
-                List<Pai> clone = new ArrayList<>(list);
+                List<Tile> clone = new ArrayList<>(list);
                 removeOrderFromList(order, clone);
-                List<List<Order>> leftOrders = findAllOrders(clone, lai);
+                List<List<Order>> leftOrders = findAllOrders(clone);
                 for (List<Order> leftOrder : leftOrders) {
                     leftOrder.add(order);
                 }
@@ -320,46 +344,45 @@ public class Room {
         return result;
     }
 
-    public List<Pai> removeOrderFromList(Order order, List<Pai> list){
-        for (Pai pai : order.getPais()) {
-            list.remove(pai);
+    public void removeOrderFromList(Order order, List<Tile> list){
+        for (Tile tile : order.getTiles()) {
+            list.remove(tile);
         }
-        return list;
     }
     /**
-     * @param pai pai to be found
-     * @param list assume list is in correct order and has no lai
-     * @param laiCount origin list lai count
-     * @return all possible order which contains “pai”
+     * @param tile tile to be found
+     * @param list assume list is in correct order and has no rascal
+     * @param rascalCount origin list rascal count
+     * @return all possible order which contains “tile”
      */
-    public List<Order> findPossibleOrderByPai(Pai pai, List<Pai> list, Pai lai, long laiCount){
+    public List<Order> findPossibleOrderByPai(Tile tile, List<Tile> list, long rascalCount){
         List<Order> possibleOrder = new ArrayList<>();
-        long count = list.stream().filter(p -> p.equals(pai)).count();
-        Pai plus1 = Pai.plusPoint(pai, 1, true);
-        Pai plus2 = Pai.plusPoint(pai, 2, true);
+        long count = list.stream().filter(p -> p.equals(tile)).count();
+        Tile plus1 = Tile.plusPoint(tile, 1, true);
+        Tile plus2 = Tile.plusPoint(tile, 2, true);
         long plus1count = 0;
         long plus2count = 0;
-        if(plus1 != null && !plus1.equals(lai)){
+        if(plus1 != null && !plus1.equals(rascal)){
             plus1count = list.stream().filter(p -> p.equals(plus1)).count();
         }
-        if(plus2 != null && !plus2.equals(lai)){
+        if(plus2 != null && !plus2.equals(rascal)){
             plus2count = list.stream().filter(p -> p.equals(plus2)).count();
         }
         if(count > 2){
-            possibleOrder.add(new Order(Order.Type.KE, pai, pai, pai));
+            possibleOrder.add(new Order(Order.Type.TRIPLET, tile, tile, tile));
         }
         if(plus1count > 0 && plus2count > 0){
-            possibleOrder.add(new Order(Order.Type.SHUN, pai, plus1, plus2));
+            possibleOrder.add(new Order(Order.Type.SEQUENCE, tile, plus1, plus2));
         }
-        if(laiCount > 0){
-            if(laiCount > 1){
-                possibleOrder.add(new Order(Order.Type.BOTH, pai, lai, lai));
+        if(rascalCount > 0){
+            if(rascalCount > 1){
+                possibleOrder.add(new Order(Order.Type.BOTH, tile, rascal, rascal));
             }
             if(plus1count > 0){
-                possibleOrder.add(new Order(Order.Type.SHUN, pai, plus1, lai));
+                possibleOrder.add(new Order(Order.Type.SEQUENCE, tile, plus1, rascal));
             }
             if(plus2count > 0){
-                possibleOrder.add(new Order(Order.Type.SHUN, pai, lai, plus2));
+                possibleOrder.add(new Order(Order.Type.SEQUENCE, tile, rascal, plus2));
             }
         }
         return possibleOrder;

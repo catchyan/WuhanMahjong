@@ -1,7 +1,8 @@
 package com.catchyan.packet;
 
 import com.catchyan.entity.Option;
-import com.catchyan.entity.Pai;
+import com.catchyan.entity.Order;
+import com.catchyan.entity.Tile;
 import com.catchyan.entity.PersonView;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,12 +19,12 @@ public class PersonViewPacket extends BasePacket{
     private PersonView opposite;
     private PersonView next;
 
-    private List<Pai> hand = new ArrayList<>();
-    private List<Pai[]> kou = new ArrayList<>();
-    private List<Pai> gang = new ArrayList<>();
-    private Pai lai;
-    private Pai pi1;
-    private Pai pi2;
+    private List<Tile> hand = new ArrayList<>();
+    private List<Order> eat = new ArrayList<>();
+    private List<Tile> gang = new ArrayList<>();
+    private Tile rascal;
+    private Tile kong1;
+    private Tile kong2;
     private int leftPaiCount;
     private List<Option> options = new ArrayList<>();
 
